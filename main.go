@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/couchbase/gocb/v2"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -92,11 +91,6 @@ func getCustomer360(customerID string) (*Customer360Response, error) {
 	customersCol := bucket.Scope("demographics").Collection("customers")
 	addressesCol := bucket.Scope("demographics").Collection("addresses")
 	contactsCol := bucket.Scope("demographics").Collection("contacts")
-	accountsCol := bucket.Scope("products").Collection("accounts")
-	depositsCol := bucket.Scope("products").Collection("deposits")
-	loansCol := bucket.Scope("products").Collection("loans")
-	cardsCol := bucket.Scope("products").Collection("cards")
-	investmentsCol := bucket.Scope("products").Collection("investments")
 	segmentsCol := bucket.Scope("analytics").Collection("segments")
 	behaviorsCol := bucket.Scope("analytics").Collection("behaviors")
 	preferencesCol := bucket.Scope("analytics").Collection("preferences")
@@ -326,12 +320,20 @@ func handleGetStats(c *gin.Context) {
 func setupRouter() *gin.Engine {
 	router := gin.Default()
 
-	// CORS configuration
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173", "http://localhost:3000"}
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
-	router.Use(cors.New(config))
+	// CORS configuration - Allow all origins for development
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
 
 	// Routes
 	api := router.Group("/api/v1")
@@ -355,7 +357,7 @@ func main() {
 	router := setupRouter()
 
 	// Start server
-	port := "8080"
+	port := "2113"
 	log.Printf("🚀 Server starting on port %s", port)
 	log.Printf("📍 API endpoint: http://localhost:%s/api/v1/customers", port)
 	log.Printf("💊 Health check: http://localhost:%s/api/v1/health", port)
