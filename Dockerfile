@@ -31,7 +31,7 @@ WORKDIR /root/
 COPY --from=builder /app/digital-banking-profile-api .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 2113
 
 # Run the application
 CMD ["./digital-banking-profile-api"]
