@@ -141,7 +141,7 @@ EOF
                     docker logs ${DOCKER_CONTAINER} --tail 20
 
                     for i in {1..10}; do
-                        if curl -sf http://localhost:${DOCKER_PORT}/health; then
+                        if curl -sf http://localhost:${DOCKER_PORT}/api/v1/health; then
                             echo "✅ Health check passed"
                             exit 0
                         fi
@@ -189,7 +189,7 @@ EOF
     post {
         success {
             echo '✅ CI/CD Pipeline completed successfully!'
-            echo "🌐 API Endpoint: http://localhost:${DOCKER_PORT}/health"
+            echo "🌐 API Endpoint: http://localhost:${DOCKER_PORT}/api/v1/health"
         }
 
         failure {
