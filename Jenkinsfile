@@ -118,7 +118,7 @@ EOF
                     docker run -d \
                         --name ${DOCKER_CONTAINER} \
                         --network ${DOCKER_NETWORK} \
-                        -p ${DOCKER_PORT}:8080 \
+                        -p ${DOCKER_PORT}:2113 \
                         -e COUCHBASE_HOST=${COUCHBASE_HOST} \
                         -e COUCHBASE_USERNAME=${COUCHBASE_USERNAME} \
                         -e COUCHBASE_PASSWORD=${COUCHBASE_PASSWORD} \
