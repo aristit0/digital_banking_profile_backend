@@ -12,7 +12,7 @@ import (
 
 // Configuration
 const (
-	CouchbaseHost     = "localhost"
+	CouchbaseHost     = "db"
 	CouchbaseUser     = "admin"
 	CouchbasePassword = "T1ku$H1t4m"
 	BucketName        = "customer_360"
